@@ -1,0 +1,3 @@
+
+
+export type AdminSubscriptionActionTypes = "modify" | "seats" | "remove-cancellation" | "set-cancellation"

@@ -1,0 +1,15 @@
+{
+  "extends": "@repo/typescript-config/vite.json",
+  "include": ["src"],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "declaration": false,
+    "composite": false,
+    "declarationMap": false,
+    "paths": {
+      "@/*": ["./src/*"],
+      "@packages/*": ["../../packages/*"]
+    },
+    "jsx": "react-jsx"
+  },
+}
