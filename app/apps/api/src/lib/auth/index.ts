@@ -4,7 +4,7 @@ import { emailOTP, twoFactor, phoneNumber, admin, apiKey, createAuthMiddleware, 
 import { stripe } from "@better-auth/stripe"
 import { passkey } from "better-auth/plugins/passkey";
 import { db } from "@/lib/db"
-import { tables } from "@packages/core/db/schemas";
+import { schemaTables } from "@packages/core/db/schemas";
 import { stripeClient } from "@/lib/stripe"
 import { stripeEventHandler } from "@/lib/stripe/event-handler"
 import { verificationEmail, otpEmail, resetPassword } from "@/lib/resend/password";
@@ -157,7 +157,7 @@ export const auth = betterAuth({
     trustedOrigins: [config.baseURL, config.frontendURL],
     database: drizzleAdapter(db, {
         provider: "pg",
-        schema: tables
+        schema: schemaTables
     }),
     advanced: {
         database: {

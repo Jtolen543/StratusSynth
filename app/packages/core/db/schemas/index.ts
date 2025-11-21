@@ -4,15 +4,9 @@ import * as auditTables from "./audit"
 import * as relationSchemas from "./relations"
 
 // Drizzle adapters expect a map of tables only; relations are exported separately.
-export const tables = {
+export const schemaTables = {
     ...authTables,
     ...planTables,
     ...auditTables,
+    ...relationSchemas
 }
-
-export const relations = {
-    ...relationSchemas,
-}
-
-// Backcompat export; prefer `tables`.
-export const schemaTables = tables
