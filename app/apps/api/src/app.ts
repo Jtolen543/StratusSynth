@@ -14,8 +14,12 @@ app.use("/*", cors({
     exposeHeaders: ["Content-Length"],
     credentials: true
 }))
-
 app.use(logger())
+
+app.get("/", async (ctx) => {
+    return ctx.redirect(config.frontendURL)
+})
+
 app.route("/api", routes)
 
 app.notFound((ctx) => {

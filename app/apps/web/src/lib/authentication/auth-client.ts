@@ -1,6 +1,6 @@
 import { createAuthClient } from "better-auth/react"
 import {twoFactorClient, emailOTPClient, adminClient, apiKeyClient, jwtClient} from "better-auth/client/plugins"
-import { passkeyClient } from "better-auth/client/plugins"
+import { passkeyClient } from "@better-auth/passkey/client"
 import { stripeClient } from "@better-auth/stripe/client"
 import { useNavigate } from "react-router"
 import { toast } from "sonner"

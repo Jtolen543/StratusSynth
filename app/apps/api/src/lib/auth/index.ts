@@ -2,7 +2,7 @@ import { APIError, betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { emailOTP, twoFactor, phoneNumber, admin, apiKey, createAuthMiddleware, jwt } from "better-auth/plugins";
 import { stripe } from "@better-auth/stripe"
-import { passkey } from "better-auth/plugins/passkey";
+import { passkey } from "@better-auth/passkey";
 import { db } from "@/lib/db"
 import { schemaTables } from "@packages/core/db/schemas";
 import { stripeClient } from "@/lib/stripe"
@@ -251,26 +251,26 @@ export const auth = betterAuth({
         emailOTP({
             otpLength: 8,
             expiresIn: 300,
-            async sendVerificationOTP({email, otp, type}, request) {
+            async sendVerificationOTP({email, otp, type}, ctx) {
                 await otpEmail(email, otp)
-                if (request) {
+                if (ctx) {
                     const event = "OTP verification sent"
                     const detail = `OTP verification sent to user`
                     const description = "OTP email sent to user"
-                    createRequestAudit(request, {event, detail, description, status: "SUCCESS"}, email)
+                    createBetterAuthAudit(ctx, {event, detail, description, status: "SUCCESS"}, email)
                 }
             }
         }),
         twoFactor({
             otpOptions: {
                 digits: 8,
-                async sendOTP ({user, otp}, request) {
+                async sendOTP ({user, otp}, ctx) {
                     await otpEmail(user.email, otp)
-                    if (request) {
+                    if (ctx) {
                         const event = "OTP sent"
                         const detail = `OTP sent to user`
                         const description = "OTP email sent to user"
-                        createRequestAudit(request, {event, detail, description, status: "SUCCESS"}, user.id)
+                        createBetterAuthAudit(ctx, {event, detail, description, status: "SUCCESS"}, user.id)
                     }
                 },
             }
