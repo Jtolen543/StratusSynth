@@ -193,6 +193,10 @@ export const auth = betterAuth({
             }
         }
     },
+    onAPIError: {
+        // Change this later to support the errors from APIError through url params
+        errorURL: `${config.frontendURL}`
+    },
     emailVerification: {
       sendVerificationEmail: async ({user, url, token}, request) => {
         await verificationEmail(user, url)

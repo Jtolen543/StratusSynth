@@ -4,6 +4,8 @@
     "dev": "bun run --hot src/server.ts"
   },
   "dependencies": {
+    "@google-cloud/talent": "^7.1.1",
+    "@types/node": "^24.10.1",
     "hono": "^4.10.6"
   },
   "devDependencies": {
