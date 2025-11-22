@@ -30,17 +30,6 @@ export const auth = betterAuth({
     user: {
         deleteUser: {
             enabled: true,
-            beforeDelete: async (auth, request) => {
-                const userData = await db.query.user.findFirst({where: (user, {eq}) => eq(user.id, auth.id)})
-                await stripeClient.customers.del(userData!.stripeCustomerId as string)
-
-                if (request) {
-                    const event = "User deleted"
-                    const detail = "User information deleted"
-                    const description = "User deleted in from database"
-                    createRequestAudit(request, {event, detail, description, status: "SUCCESS"}, auth.id)
-                }
-            }
         },
         changeEmail: {
             enabled: true,
@@ -59,7 +48,6 @@ export const auth = betterAuth({
         user: {
             create: {
                 after: async (user, ctx) => {
-
                     if (ctx) {
                         const basePath = new URL(ctx.request?.url ?? "").pathname
                         const provider = basePath?.includes("callback") ? toTitle(basePath.substring(basePath.lastIndexOf("/") + 1)) : "Email/Password"
@@ -95,6 +83,19 @@ export const auth = betterAuth({
                         createBetterAuthAudit(ctx, {event, detail, description, status: "SUCCESS"}, user.id)
                     }
                 }
+            },
+            delete: {
+                before: async (auth, ctx) => {
+                    const userData = await db.query.user.findFirst({where: (user, {eq}) => eq(user.id, auth.id)})
+                    await stripeClient.customers.del(userData!.stripeCustomerId as string)
+
+                    if (ctx) {
+                        const event = "User deleted"
+                        const detail = "User information deleted"
+                        const description = "User deleted in from database"
+                        createBetterAuthAudit(ctx, {event, detail, description, status: "SUCCESS"}, auth.id)
+                    }
+                }
             }
         },
         account: {
@@ -114,6 +115,16 @@ export const auth = betterAuth({
                         const event = "Account updated"
                         const detail = "Account information updated"
                         const description = "Account updated in database"
+                        createBetterAuthAudit(ctx, {event, detail, description, status: "SUCCESS"}, account.userId)
+                    }
+                }
+            },
+            delete: {
+                after: async(account, ctx) => {
+                    if (ctx) {
+                        const event = "Account deleted"
+                        const detail = "Account information deleted"
+                        const description = "Account deleted in database"
                         createBetterAuthAudit(ctx, {event, detail, description, status: "SUCCESS"}, account.userId)
                     }
                 }
@@ -139,8 +150,18 @@ export const auth = betterAuth({
                         createBetterAuthAudit(ctx, {event, detail, description, status: "SUCCESS"}, session.userId)
                     }
                 }
+            },
+            delete: {
+                after: async(session, ctx) => {
+                    if (ctx) {
+                        const event = "Session removed"
+                        const detail = "Session has been removed"
+                        const description = "Session deleted in database"
+                        createBetterAuthAudit(ctx, {event, detail, description, status: "SUCCESS"}, session.userId)
+                    }
+                } 
             }
-        }
+        },
     },
     hooks: {
         after: createAuthMiddleware(async (ctx) => {
