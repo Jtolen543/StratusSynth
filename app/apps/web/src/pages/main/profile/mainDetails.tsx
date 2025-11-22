@@ -22,6 +22,7 @@ import { toast } from "sonner"
 import { Easing, motion } from "framer-motion"
 import { User, Monitor, Smartphone, Tablet, Key, Link as LinkIcon, Unlink, Trash2, AlertTriangle } from "lucide-react"
 import { useNavigate } from "react-router"
+import { config } from "@/config"
 
 function formatTimeElapsed(createdAt: Date | string): string {
   const normalizedDate = typeof createdAt === "string" ? new Date(createdAt) : createdAt
@@ -82,7 +83,7 @@ export const MainDetails = ({data}: TabsComponentProps) => {
   async function linkSocialProvider(provider: string) {
     await authClient.linkSocial({
       provider: provider.toLowerCase(),
-      callbackURL: "/profile",
+      callbackURL: `${config.baseURL}/profile`,
       fetchOptions: {
         onSuccess: () => {
           toast.info(`Attempting to connect to ${provider}`)
