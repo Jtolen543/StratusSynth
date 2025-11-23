@@ -9,7 +9,7 @@ interface ServiceClientProps {
 }
 
 export async function serviceClient<T = unknown>({ path, method = "GET", body, queryParams = {}, init = {} }: ServiceClientProps): Promise<T> {
-  const url = new URL(path, config.baseURL);
+  const url = new URL(path, `${config.baseURL}/cloud`);
 
   for (const [key, val] of Object.entries(queryParams)) {
     if (val !== undefined && val !== null) {

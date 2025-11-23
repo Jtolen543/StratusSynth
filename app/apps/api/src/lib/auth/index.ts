@@ -18,6 +18,8 @@ import { and, eq, inArray } from "drizzle-orm";
 import { toTitle } from "@packages/utils/format"
 import { createBetterAuthAudit, createRequestAudit, createStripeEventAudit } from "@/lib/audit"
 import { config } from "@/config";
+import { serviceClient } from "@/lib/service";
+import { safeNameOrHash } from "../encrypt";
 
 export const auth = betterAuth({
     account: {
@@ -72,6 +74,14 @@ export const auth = betterAuth({
                     await Promise.all([
                         ...usageMetrics.map((metric) => createUsage(metric)) 
                     ])
+                    
+                    const cleanedUsername = safeNameOrHash(user)
+                    const data = await serviceClient({
+                        path: "/tenant",
+                        body: {
+                            name: cleanedUsername
+                        },
+                    })
                 },
             },
             update: {

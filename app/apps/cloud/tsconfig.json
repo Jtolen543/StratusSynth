@@ -3,6 +3,9 @@
     "strict": true,
     "jsx": "react-jsx",
     "jsxImportSource": "hono/jsx",
+    "target": "esnext",
+    "moduleResolution": "nodenext",
+    "module": "nodenext",
     "paths": {
       "@/*": ["./src/*"],
       "@packages/*": ["../../packages/*"]
