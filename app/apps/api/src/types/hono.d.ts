@@ -6,5 +6,6 @@ declare module "hono" {
   interface ContextVariableMap {
     session: Session | null
     user: UserWithRole & {role: ApplicationRoles} | null
+    serviceKey: string
   }
 }

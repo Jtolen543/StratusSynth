@@ -8,7 +8,7 @@ import { HTTPException } from "hono/http-exception";
 export const app = new Hono()
 
 app.use("/*", cors({
-    origin: [config.frontendURL, config.baseURL],
+    origin: [config.frontendURL, config.baseURL, config.apiURL],
     allowHeaders: ["Content-Type", "Authorization"],
     allowMethods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     exposeHeaders: ["Content-Length"],
@@ -16,7 +16,8 @@ app.use("/*", cors({
 }))
 
 app.use(logger())
-app.route("/api", routes)
+
+app.route("/cloud", routes)
 
 app.notFound((ctx) => {
     console.error("Unknown endpoint, please check your URL and try again.")

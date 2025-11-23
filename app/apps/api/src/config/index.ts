@@ -3,7 +3,9 @@ import {z} from "zod"
 const envSchema = z.object({
   BETTER_AUTH_URL: z.url(),
   FRONTEND_BASE_URL: z.url(),
+  CLOUD_SERVER_URL: z.url(),
   BETTER_AUTH_SECRET: z.string(),
+  SERVICE_API_KEY: z.string(),
   RESEND_DOMAIN_ADDRESS: z.string(),
   RESEND_API_KEY: z.string(),
   DATABASE_URL: z.string(),
@@ -30,7 +32,9 @@ export const env = envSchema.parse(process.env)
 export const config = {
   baseURL: env.BETTER_AUTH_URL,
   frontendURL: env.FRONTEND_BASE_URL,
+  cloudURL: env.CLOUD_SERVER_URL,
 
+  serviceAPIKey: env.SERVICE_API_KEY,
   authSecret: env.BETTER_AUTH_SECRET,
   resendApiKey: env.RESEND_API_KEY,
   databaseUrl: env.DATABASE_URL,
