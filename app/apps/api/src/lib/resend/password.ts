@@ -1,8 +1,8 @@
 import { resend } from ".";
-import EmailVerification from "@packages/emails/email-verification";
-import OtpVerification from "@packages/emails/otp-verification";
+import EmailVerification from "@/lib/resend/templates/email-verification";
+import OtpVerification from "@/lib/resend/templates/otp-verification";
 import type { User } from "better-auth";
-import PasswordReset from "@packages/emails/password-reset";
+import PasswordReset from "@/lib/resend/templates/password-reset";
 
 export const verificationEmail = async (user: User, url: string)=> {
   const {data, error} = await resend.emails.send({

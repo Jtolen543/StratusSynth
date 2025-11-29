@@ -18,9 +18,6 @@ import { and, eq, inArray } from "drizzle-orm";
 import { toTitle } from "@packages/utils/format"
 import { createBetterAuthAudit, createRequestAudit, createStripeEventAudit } from "@/lib/audit"
 import { config } from "@/config";
-import { serviceClient } from "@/lib/service";
-import { safeNameOrHash } from "../encrypt";
-import { TenantBodyProps } from "@packages/types/tenant"
 
 export const auth = betterAuth({
     account: {
@@ -28,7 +25,6 @@ export const auth = betterAuth({
             enabled: true,
             trustedProviders: ["github", "google", "microsoft", "discord"]
         },
-
     },
     user: {
         deleteUser: {
@@ -73,23 +69,12 @@ export const auth = betterAuth({
                         })
                     }
                     await Promise.all([
-                        ...usageMetrics.map((metric) => createUsage(metric)) 
+                        ...usageMetrics.map((metric) => createUsage(metric)),
+                        db.insert(schemaTables.tenant).values({
+                            userId: user.id,
+                            provider: "gcp"
+                        })
                     ])
-                    
-                    const cleanedUsername = safeNameOrHash(user)
-                    const response = await serviceClient<TenantBodyProps>({
-                        path: "tenant",
-                        method: "POST",
-                        body: {
-                            name: cleanedUsername
-                        },
-                    })
-                    const { data } = response
-                    await db.insert(schemaTables.tenant).values({
-                        name: data.displayName,
-                        providerId: data.tenantId,
-                        userId: user.id
-                    })
                 },
             },
             update: {

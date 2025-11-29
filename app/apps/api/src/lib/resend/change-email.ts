@@ -1,5 +1,5 @@
 import { resend } from ".";
-import ChangeEmailTemplate from "@packages/emails/change-email";
+import ChangeEmailTemplate from "@/lib/resend/templates/change-email";
 
 export const sendChangeEmail = async (email: string, url: string) => {
   const { data, error } = await resend.emails.send({

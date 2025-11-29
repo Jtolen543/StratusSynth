@@ -17,6 +17,7 @@ import { UserData } from "@/hooks/use-user-data"
 import { Loader2 } from "lucide-react"
 import { PasswordForm } from "./passwordForm"
 import { authClient } from "@/lib/authentication/auth-client"
+import { config } from "@/config"
 
 const formSchema = z.object({
   firstName: z.string().min(1, { message: "First name is required" }).max(64),
@@ -69,7 +70,7 @@ export function UpdateInformationForm({ data }: { data: UserData }) {
       if (values.email && values.email !== data?.user?.email) {
         await authClient.changeEmail({
           newEmail: values.email,
-          callbackURL: "/profile"
+          callbackURL: `${config.baseURL}/profile`
         })
       }
 

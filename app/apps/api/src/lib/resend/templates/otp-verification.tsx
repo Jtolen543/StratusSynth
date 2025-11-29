@@ -1,5 +1,6 @@
-import { Body, Container, Head, Heading, Html, Img, Preview, Section, Text } from "@react-email/components"
+/** @jsxImportSource react */
 
+import { Body, Container, Head, Heading, Html, Img, Preview, Section, Text } from "@react-email/components"
 
 export const OtpVerification = (otp: string) => (
   <Html>

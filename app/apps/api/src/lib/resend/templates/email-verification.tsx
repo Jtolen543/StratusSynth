@@ -1,3 +1,5 @@
+/** @jsxImportSource react */
+
 import {
   Body,
   Button,
@@ -10,8 +12,6 @@ import {
   Section,
   Text
 } from "@react-email/components"
-
-
 
 export const EmailVerification = (name: string, url: string) => (
   <Html>

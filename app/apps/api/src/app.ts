@@ -1,4 +1,4 @@
-import { routes } from "./routes";
+import { APIRoutes } from "./routes";
 import { Hono } from "hono";
 import { cors } from 'hono/cors'
 import { logger } from "hono/logger"
@@ -20,7 +20,7 @@ app.get("/", async (ctx) => {
     return ctx.redirect(config.frontendURL)
 })
 
-app.route("/api", routes)
+app.route("/api", APIRoutes)
 
 app.notFound((ctx) => {
     console.error("Unknown endpoint, please check your URL and try again.")

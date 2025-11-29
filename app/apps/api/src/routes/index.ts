@@ -1,16 +1,16 @@
 import { Hono } from 'hono'
-import { statusRoute } from './status'
-import { betterAuthRoute } from "./auth"
-import { usageRoute } from './usage'
-import { adminRoute } from './admin'
-import { cronJobRouter } from './cron'
+import { statusRoute } from './api/status'
+import { betterAuthRoute } from "./api/auth"
+import { usageRoute } from './api/usage'
+import { adminRoutes } from './admin'
+import { cronJobRouter } from './api/cron'
+import { platformRoutes } from './platform'
 
-// Import all routes here
+export const APIRoutes = new Hono()
 
-export const routes = new Hono()
-
-routes.route("/", statusRoute)
-routes.route("/auth", betterAuthRoute)
-routes.route("/usage", usageRoute)
-routes.route("/admin", adminRoute)
-routes.route("/cron", cronJobRouter)
+APIRoutes.route("/", statusRoute)
+APIRoutes.route("/auth", betterAuthRoute)
+APIRoutes.route("/usage", usageRoute)
+APIRoutes.route("/admin", adminRoutes)
+APIRoutes.route("/cron", cronJobRouter)
+APIRoutes.route("/platform", platformRoutes)

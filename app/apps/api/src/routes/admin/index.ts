@@ -4,16 +4,16 @@ import { adminAuditRoute } from "./audit";
 import { adminUsageRoute } from "./usage";
 import { adminSubscriptionRoute } from "./subscription";
 
-export const adminRoute = new Hono()
-adminRoute.use(attachAuth, requireAuth, requirePermission("moderator"))
+export const adminRoutes = new Hono()
+adminRoutes.use(attachAuth, requireAuth, requirePermission("moderator"))
 
-adminRoute.get("/", async (ctx) => {
+adminRoutes.get("/", async (ctx) => {
   return ctx.json({
     user: ctx.get("user"),
     session: ctx.get("session")
   })
 })
 
-adminRoute.route("/audit", adminAuditRoute)
-adminRoute.route("/subscription", adminSubscriptionRoute)
-adminRoute.route("/usage", adminUsageRoute)
+adminRoutes.route("/audit", adminAuditRoute)
+adminRoutes.route("/subscription", adminSubscriptionRoute)
+adminRoutes.route("/usage", adminUsageRoute)
