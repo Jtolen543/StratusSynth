@@ -7,7 +7,12 @@ interface ClientAPIProps {
 }
 
 export async function clientAPI({ path, options = {}, queryParams = {} }: ClientAPIProps) {
-  const url = new URL(path, config.apiURL);
+  let cleanedPath = path.replace(/^\/+/, "")
+
+  if (cleanedPath.startsWith("api/")) cleanedPath = cleanedPath.slice("api/".length)
+
+  const base = new URL("/api/", config.apiURL);
+  const url = new URL(cleanedPath, base);
 
   for (const [key, value] of Object.entries(queryParams)) {
     if (value !== undefined && value !== null) {

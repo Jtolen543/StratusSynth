@@ -24,7 +24,7 @@ export function useUpdateSubscription() {
     mutationKey: ["admin-update-subscription"],
     mutationFn: async (payload: SubscriptionMutationPayload) => {
       const response = await clientAPI({
-        path: "/api/admin/subscription",
+        path: "admin/subscription",
         options: {
           method: "POST",
           body: JSON.stringify(payload)

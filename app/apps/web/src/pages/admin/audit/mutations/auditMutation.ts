@@ -15,7 +15,7 @@ export function useDeleteAuditLog() {
         mutationFn: async (payload) => {
             
             const res = await clientAPI({
-                path: "/api/admin/audit",
+                path: "admin/audit",
                 options: {method: "DELETE"},
                 queryParams: payload.id ? {id: payload.id} : {}
             })

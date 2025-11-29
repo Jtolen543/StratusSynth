@@ -20,6 +20,7 @@ import { createBetterAuthAudit, createRequestAudit, createStripeEventAudit } fro
 import { config } from "@/config";
 import { serviceClient } from "@/lib/service";
 import { safeNameOrHash } from "../encrypt";
+import { TenantBodyProps } from "@packages/types/tenant"
 
 export const auth = betterAuth({
     account: {
@@ -76,11 +77,18 @@ export const auth = betterAuth({
                     ])
                     
                     const cleanedUsername = safeNameOrHash(user)
-                    const data = await serviceClient({
-                        path: "/tenant",
+                    const response = await serviceClient<TenantBodyProps>({
+                        path: "tenant",
+                        method: "POST",
                         body: {
                             name: cleanedUsername
                         },
+                    })
+                    const { data } = response
+                    await db.insert(schemaTables.tenant).values({
+                        name: data.displayName,
+                        providerId: data.tenantId,
+                        userId: user.id
                     })
                 },
             },
@@ -295,7 +303,7 @@ export const auth = betterAuth({
                     await otpEmail(user.email, otp)
                     if (ctx) {
                         const event = "OTP sent"
-                        const detail = `OTP sent to user`
+                        const detail = "OTP sent to user"
                         const description = "OTP email sent to user"
                         createBetterAuthAudit(ctx, {event, detail, description, status: "SUCCESS"}, user.id)
                     }

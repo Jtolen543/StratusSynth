@@ -1,15 +1,21 @@
 import { config } from "@/config";
 
+
 interface ServiceClientProps {
   path: string
-  method?: string
+  method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE"
   body?: any
   queryParams?: Record<string, string | number>
   init?: RequestInit
 }
 
 export async function serviceClient<T = unknown>({ path, method = "GET", body, queryParams = {}, init = {} }: ServiceClientProps): Promise<T> {
-  const url = new URL(path, `${config.baseURL}/cloud`);
+  let cleanedPath = path.replace(/^\/+/, "")
+
+  if (cleanedPath.startsWith("cloud/")) cleanedPath = cleanedPath.slice("cloud/".length)
+
+  const base = new URL("/cloud/", config.cloudURL);
+  const url = new URL(cleanedPath, base);
 
   for (const [key, val] of Object.entries(queryParams)) {
     if (val !== undefined && val !== null) {

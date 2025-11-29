@@ -13,7 +13,7 @@ export function useUserUsages(user: User | undefined) {
   const query = useQuery({
     queryKey: ["user-usages", user?.id],
     queryFn: async () => {        
-      const res = await clientAPI({path: "/api/usage"})
+      const res = await clientAPI({path: "usage"})
       const body: {usages: typeof usage.$inferSelect[], plan: PlanProps} = await res.json()
       const result = body.usages.map((usage) => ({
         ...usage, 

@@ -11,7 +11,7 @@ export function useAdminSession() {
   const query = useQuery({
     queryKey: ["admin-session"],
     queryFn: async () => {        
-      const res = await clientAPI({path: "/api/admin"})
+      const res = await clientAPI({path: "admin"})
 
       if (res.status === 401) {
         toast.error("Must be signed in before accessing protected routes")

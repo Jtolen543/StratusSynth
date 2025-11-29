@@ -20,7 +20,7 @@ export function useUpdateUsage() {
     mutationKey: ["admin-update-usage"],
     mutationFn: async (payload) => {
       const response = await clientAPI({
-        path: "/api/admin/usage",
+        path: "admin/usage",
         options: {
           method: "POST",
           body: JSON.stringify(payload)

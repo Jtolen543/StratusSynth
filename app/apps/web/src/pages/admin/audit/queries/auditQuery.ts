@@ -17,7 +17,7 @@ export function useListAuditLogs(initialPage: number = 1, initialPageSize: numbe
                 search: search
             }
             const res = await clientAPI({
-                path: "/api/admin/audit",
+                path: "admin/audit",
                 queryParams: queries
             })
             const body: AuditLogGetResponse = await res.json()

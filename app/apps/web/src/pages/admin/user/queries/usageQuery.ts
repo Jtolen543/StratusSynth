@@ -18,7 +18,7 @@ export function useGetUsage(user: User | undefined, options: UseGetUsageOptions 
       if (!userId) throw new Error("Invalid user id");
 
       const res = await clientAPI({
-        path: "/api/admin/usage",
+        path: "admin/usage",
         queryParams: {id: user.id}
       });
       if (!res.ok) {
