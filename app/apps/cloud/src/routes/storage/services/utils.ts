@@ -1,4 +1,5 @@
 import { config } from "@/config"
+import { Bucket } from "@google-cloud/storage"
 import { HTTPException } from "hono/http-exception"
 
 export function getBucketPath(tenantId: string, bucketName?: string) {
@@ -11,4 +12,17 @@ export function getBucketPath(tenantId: string, bucketName?: string) {
     })
 
     return basePath
+}
+
+export async function getBucketMetaInformation(bucket: Bucket, bucketName: string) {
+    const metaData = (await bucket.getMetadata())[0]
+    const metaInformation = {
+        fullName: bucket.name,
+        bucketName: bucketName,
+        uri: bucket.cloudStorageURI.href,
+        storageClass: metaData.storageClass!,
+        location: metaData.location!,
+        locationType: metaData.locationType!,
+    }
+    return metaInformation
 }

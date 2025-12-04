@@ -14,7 +14,7 @@ export async function createBucket(tenantId: string, bucketName: string) {
   const bucket = await storageClient.createBucket(bucketPath, {
     location: "US",
   })
-  return bucket
+  return bucket[0]
 }
 
 export async function deleteBucket(tenantId: string, bucketName: string) {
@@ -37,5 +37,5 @@ export async function listBuckets(tenantId: string) {
   const buckets = await storageClient.getBuckets({
     prefix: basePath
   })
-  return buckets
+  return buckets[0]
 }

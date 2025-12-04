@@ -19,19 +19,20 @@ export function useUpdateUsage() {
   return useMutation<UsageMutationResponse, Error, UsageMutationPayload>({
     mutationKey: ["admin-update-usage"],
     mutationFn: async (payload) => {
-      const response = await clientAPI({
+      const data = await clientAPI<UsageMutationResponse>({
         path: "admin/usage",
         options: {
           method: "POST",
           body: JSON.stringify(payload)
-        }
+        },
+        async errorHandler(response) {
+          if (!response.ok) {
+            const errorText = await response.json();
+            throw new Error(errorText.message || "Failed to update subscription.");
+          }
+        },
       });
-
-      if (!response.ok) {
-        const errorText = await response.json();
-        throw new Error(errorText.message || "Failed to update subscription.");
-      }
-      return await response.json()
+      return data
     },
     onSuccess: async (ctx) => {
       await Promise.all([

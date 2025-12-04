@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router";
-import { RootLayout } from "./layouts/root-layout";
+
+// Pages
 import { LandingPage } from "./pages/main/landing/LandingPage";
 import { SignUpPage } from "./pages/main/auth/SignUpPage";
 import { SignInPage } from "./pages/main/auth/SignInPage";
@@ -13,16 +14,20 @@ import { ContactPage } from "./pages/main/support/ContactPage";
 import { AboutPage } from "./pages/main/support/AboutPage";
 import { TwoFactorPage } from "./pages/main/auth/2FAPage";
 import { ResetPasswordPage } from "./pages/main/auth/ResetPasswordPage";
-import { DashboardLayout } from "./layouts/dashboard-layout";
 import { DashboardHomePage } from "./pages/dashboard/home/DashboardHomePage";
 import { DashboardStoragePage } from "./pages/dashboard/storage/DashboardStoragePage";
 import { DashboardDatabasePage } from "./pages/dashboard/database/DashboardDatabasePage";
 import { DashboardApplicationPage } from "./pages/dashboard/application/ApplicationPage";
 import { DashboardAgentPage } from "./pages/dashboard/agent/DashboardAgentPage";
-import { AdminLayout } from "./layouts/admin-layout";
 import { AdminUsersPage } from "./pages/admin/user/AdminUsersPage";
 import { AdminAuditLogsPage } from "./pages/admin/audit/AdminAuditLogsPage";
 import { AdminHomePage } from "./pages/admin/home/AdminHomePage";
+
+// Layouts
+import { RootLayout } from "./layouts/root-layout";
+import { DashboardLayout } from "./layouts/dashboard-layout";
+import { AdminLayout } from "./layouts/admin-layout";
+
 
 export function App() {
   return (

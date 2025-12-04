@@ -26,6 +26,7 @@
     "packages/*"
   ],
   "dependencies": {
+    "@types/node": "^24.10.1",
     "drizzle-kit": "^0.31.7"
   }
 }

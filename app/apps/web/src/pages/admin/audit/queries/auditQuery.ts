@@ -16,11 +16,10 @@ export function useListAuditLogs(initialPage: number = 1, initialPageSize: numbe
                 limit: pageSize.toString(),
                 search: search
             }
-            const res = await clientAPI({
+            const body = await clientAPI<AuditLogGetResponse>({
                 path: "admin/audit",
                 queryParams: queries
             })
-            const body: AuditLogGetResponse = await res.json()
             
             return {
                 logs: body.data,

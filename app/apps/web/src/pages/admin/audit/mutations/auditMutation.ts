@@ -14,15 +14,16 @@ export function useDeleteAuditLog() {
         mutationKey: ["admin-audit-delete-logs"],
         mutationFn: async (payload) => {
             
-            const res = await clientAPI({
+            const data = await clientAPI<AuditLogDeleteResponse>({
                 path: "admin/audit",
                 options: {method: "DELETE"},
-                queryParams: payload.id ? {id: payload.id} : {}
+                queryParams: payload.id ? {id: payload.id} : {},
+                errorHandler: (res) => {
+                    if (!res.ok) throw new Error("Failed to delete log event")
+                }
             })
 
-            if (!res.ok) throw new Error("Failed to delete log event")
-
-            return await res.json()
+            return data
         },
         onSuccess: async (ctx) => {
             toast.success(ctx.message)

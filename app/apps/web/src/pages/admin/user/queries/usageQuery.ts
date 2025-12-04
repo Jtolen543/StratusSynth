@@ -17,16 +17,14 @@ export function useGetUsage(user: User | undefined, options: UseGetUsageOptions 
     queryFn: async () => {
       if (!userId) throw new Error("Invalid user id");
 
-      const res = await clientAPI({
+      const body = await clientAPI<{ usages: typeof usage.$inferSelect[], plan: PlanProps }>({
         path: "admin/usage",
-        queryParams: {id: user.id}
+        queryParams: {id: user.id},
+        errorHandler: (res) => {
+          if (!res.ok) throw new Error("Failed to load usage data.");
+        }
       });
-      if (!res.ok) {
-        throw new Error("Failed to load usage data.");
-      }
 
-      const body: { usages: typeof usage.$inferSelect[], plan: PlanProps } = await res.json();
-      console.log(body)
       const result = body.usages.map((usage) => ({
         ...usage, 
         limit: userLimits[body.plan][usage.metric as MetricProps]

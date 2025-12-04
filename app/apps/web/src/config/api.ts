@@ -4,10 +4,11 @@ interface ClientAPIProps {
   path: string;
   options?: RequestInit;
   queryParams?: Record<string, string | number>;
-  platform: boolean
+  platform?: boolean;
+  errorHandler?: (response: Response) => void
 }
 
-export async function clientAPI({ path, options = {}, queryParams = {}, platform = false }: ClientAPIProps) {
+export async function clientAPI<T = unknown>({ path, options = {}, queryParams = {}, errorHandler = undefined, platform = false }: ClientAPIProps): Promise<T> {
   let cleanedPath = path.replace(/^\/+/, "")
 
   if (cleanedPath.startsWith("api/")) cleanedPath = cleanedPath.slice("api/".length)
@@ -21,7 +22,7 @@ export async function clientAPI({ path, options = {}, queryParams = {}, platform
     }
   }
 
-  return fetch(url.toString(), {
+  const response = await fetch(url.toString(), {
     ...options,
     headers: {
       "Content-Type": "application/json",
@@ -29,4 +30,19 @@ export async function clientAPI({ path, options = {}, queryParams = {}, platform
     },
     credentials: "include",
   });
+
+  if (errorHandler) {
+    errorHandler(response)
+  } else {
+    if (!response.ok) {
+      const text = await response.text()
+      throw new Error (`API Error - ${response.status} - ${text}`)
+    }
+  }
+
+  if (response.headers.get("content-type")?.includes("application/json")) {
+    return (await response.json()) as T
+  }
+
+  return undefined as unknown as T
 }

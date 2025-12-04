@@ -23,19 +23,22 @@ export function useUpdateSubscription() {
   return useMutation<SubscriptionMutationResponse, Error, SubscriptionMutationPayload>({
     mutationKey: ["admin-update-subscription"],
     mutationFn: async (payload: SubscriptionMutationPayload) => {
-      const response = await clientAPI({
+      const data = await clientAPI<SubscriptionMutationResponse>({
         path: "admin/subscription",
         options: {
           method: "POST",
           body: JSON.stringify(payload)
         },
+        errorHandler: async (response) => {
+          if (!response.ok) {
+            const errorText = await response.json();
+            throw new Error(errorText.message || "Failed to update subscription.");
+          }
+        }
       });
 
-      if (!response.ok) {
-        const errorText = await response.json();
-        throw new Error(errorText.message || "Failed to update subscription.");
-      }
-      return await response.json()
+
+      return data
     },
     onSuccess: async (ctx) => {
       toast.success(ctx.message)

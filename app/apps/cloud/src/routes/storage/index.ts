@@ -1,23 +1,17 @@
 import { Hono } from "hono";
 import { createBucket, deleteBucket, listBuckets } from "./services/buckets";
+import { getBucketMetaInformation } from "./services/utils";
 
 export const cloudStorageRoutes = new Hono()
 
 cloudStorageRoutes.post("/", async (ctx) => {
   const body = await ctx.req.json()
 
-  const { tenantId, bucketName } = body
+  const { tenantId, bucketName } = body as {tenantId: string, bucketName: string}
 
   const bucket = await createBucket(tenantId, bucketName)
-  return ctx.json({data: bucket})
-})
-
-cloudStorageRoutes.get("/", async (ctx) => {
-  const query = ctx.req.query()
-  const { tenantId } = query
-  
-  const buckets = await listBuckets(tenantId)
-  return ctx.json({data: buckets})
+  const data = await getBucketMetaInformation(bucket, bucketName)
+  return ctx.json({data})
 })
 
 cloudStorageRoutes.delete("/", async (ctx) => {

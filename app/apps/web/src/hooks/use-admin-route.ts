@@ -11,19 +11,21 @@ export function useAdminSession() {
   const query = useQuery({
     queryKey: ["admin-session"],
     queryFn: async () => {        
-      const res = await clientAPI({path: "admin"})
+      const data = await clientAPI<{user: UserWithRole, session: Session}>({ 
+        path: "admin",
+        errorHandler: (res) => {
+          if (res.status === 401) {
+            toast.error("Must be signed in before accessing protected routes")
+            navigate("/signin")
+          }
+          if (!res.ok) {
+            toast.error("Unauthorized access")
+            navigate("/")
+          }
+        },
+      })
 
-      if (res.status === 401) {
-        toast.error("Must be signed in before accessing protected routes")
-        navigate("/signin")
-      }
-      if (!res.ok) {
-        toast.error("Unauthorized access")
-        navigate("/")
-      }
-        
-      const body: {user: UserWithRole, session: Session} = await res.json()
-      return body
+      return data
     },
     staleTime: 60_000,
     gcTime: 5 * 60_000
