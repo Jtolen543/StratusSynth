@@ -7,7 +7,7 @@ export function useListBuckets() {
     queryKey: ["list-user-buckets"],
     queryFn: async () => {
       const res = await clientAPI<ListBucketsAPIResponseProps>({
-        path: "storage", 
+        path: "bucket", 
         platform: true
       })
       

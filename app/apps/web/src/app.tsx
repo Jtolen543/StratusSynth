@@ -27,6 +27,7 @@ import { AdminHomePage } from "./pages/admin/home/AdminHomePage";
 import { RootLayout } from "./layouts/root-layout";
 import { DashboardLayout } from "./layouts/dashboard-layout";
 import { AdminLayout } from "./layouts/admin-layout";
+import { DashboardBucketPage } from "./pages/dashboard/storage/DashboardBucketPage";
 
 
 export function App() {
@@ -62,7 +63,10 @@ export function App() {
         {/* Dashboard */}
         <Route path="/dashboard" element={<DashboardLayout />}>
           <Route index element={<DashboardHomePage />} />
+
           <Route path="storage" element={<DashboardStoragePage />} />
+          <Route path="storage/:id" element={<DashboardBucketPage />}/>
+
           <Route path="database" element={<DashboardDatabasePage />} />
           <Route path="application" element={<DashboardApplicationPage />} />
           <Route path="agent" element={<DashboardAgentPage />} />

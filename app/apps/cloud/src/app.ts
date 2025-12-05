@@ -25,7 +25,6 @@ app.notFound((ctx) => {
 })
 
 app.onError((err, ctx) => {
-    console.error(err);
     if (err instanceof HTTPException) {
         return ctx.json({ error: err.message, cause: err.cause, name: err.name }, err.status);
     } else return ctx.json({ error: err.message, cause: err.cause, name: err.name }, 500)

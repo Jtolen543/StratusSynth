@@ -1,4 +1,4 @@
-import { Storage } from "@google-cloud/storage";
+import { Storage, FileMetadata } from "@google-cloud/storage";
 import { getBucketPath } from "./utils";
 import { HTTPException } from "hono/http-exception";
 
@@ -27,8 +27,16 @@ export async function deleteBucket(tenantId: string, bucketName: string) {
 export async function getBucket(tenantId: string, bucketName: string) {
   const bucketPath = getBucketPath(tenantId, bucketName)
 
-  const bucket = (await storageClient.bucket(bucketPath).get())[0]
-  return bucket
+  const [files] = (await storageClient.bucket(bucketPath).getFiles())
+  
+  const objectMetaData: FileMetadata[] = new Array()
+
+  for (const file of files) {
+    const [metaData] = await file.getMetadata()
+    objectMetaData.push(metaData)
+  }
+
+  return objectMetaData
 }
 
 export async function listBuckets(tenantId: string) {

@@ -1,5 +1,5 @@
-import { Bucket } from "@google-cloud/storage";
-import { bucket } from "@packages/core/db/schemas/platform/storage";
+import { Bucket, FileMetadata } from "@google-cloud/storage";
+import { bucket } from "../core/db/schemas/bucket"
 
 export type CreateBucketAPIResponseProps = {
   tenantId: string;
@@ -27,5 +27,5 @@ export type ListBucketsAPIResponseProps = {
 }
 
 export type GetBucketCloudResponseProps = {
-  data: Bucket
+  data: FileMetadata[]
 }

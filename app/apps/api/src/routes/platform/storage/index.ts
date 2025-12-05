@@ -3,12 +3,12 @@ import { Hono } from "hono";
 import { CreateBucketCloudResponseProps } from "@packages/types/bucket"
 import { HTTPException } from "hono/http-exception";
 import { db } from "@/lib/db";
-import { bucket } from "@packages/core/db/schemas/platform/storage";
+import { bucket } from "@packages/core/db/schemas/bucket";
 import { eq } from "drizzle-orm";
 
-export const platformStorageRoutes = new Hono()
+export const platformBucketRoutes = new Hono()
 
-platformStorageRoutes.post("/", async (ctx) => {
+platformBucketRoutes.post("/", async (ctx) => {
   const tenantId = ctx.get("tenant")
   const { bucketName } = ctx.req.query()
 
@@ -19,7 +19,8 @@ platformStorageRoutes.post("/", async (ctx) => {
 
   const response = await serviceClient<CreateBucketCloudResponseProps>({
     path: "storage",
-    body: JSON.stringify({tenantId, bucketName})
+    body: {tenantId, bucketName},
+    method: "POST"
   })
 
   const body = {
@@ -35,7 +36,7 @@ platformStorageRoutes.post("/", async (ctx) => {
   return ctx.json(body)
 })
 
-platformStorageRoutes.get("/", async (ctx) => {
+platformBucketRoutes.get("/", async (ctx) => {
   const tenantId = ctx.get("tenant")
   const buckets = await db.select().from(bucket).where(eq(bucket.tenantId, tenantId))
 

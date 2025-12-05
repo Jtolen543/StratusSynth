@@ -17,8 +17,7 @@ export function getBucketPath(tenantId: string, bucketName?: string) {
 export async function getBucketMetaInformation(bucket: Bucket, bucketName: string) {
     const metaData = (await bucket.getMetadata())[0]
     const metaInformation = {
-        fullName: bucket.name,
-        bucketName: bucketName,
+        name: bucketName,
         uri: bucket.cloudStorageURI.href,
         storageClass: metaData.storageClass!,
         location: metaData.location!,

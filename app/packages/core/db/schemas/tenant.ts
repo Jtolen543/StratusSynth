@@ -4,7 +4,7 @@ import {
     text,
     uuid 
 } from "drizzle-orm/pg-core"
-import { user } from "../auth"
+import { user } from "./auth"
 
 const providerEnums = pgEnum("provider", ["gcp", "aws", "azure"])
 

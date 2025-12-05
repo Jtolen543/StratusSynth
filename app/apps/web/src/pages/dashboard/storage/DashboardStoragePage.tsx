@@ -2,6 +2,24 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import {
   Table,
   TableBody,
   TableCell,
@@ -9,8 +27,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Loader2, HardDrive, RefreshCw } from "lucide-react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2, HardDrive, RefreshCw, Plus } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { toast } from "sonner";
+import { useState } from "react";
 import { useListBuckets } from "./queries/useListBuckets";
+import { useCreateBucket } from "./mutations/useCreateBucket";
+import { useNavigate } from "react-router";
 
 function formatDate(value?: string | Date | null) {
   if (!value) return "--";
@@ -41,12 +66,44 @@ function formatBytes(value?: number | null) {
   return `${size.toFixed(precision)} ${units[unitIndex]}`;
 }
 
+const createBucketSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(3, "Bucket name must be at least 3 characters")
+    .max(18, "Bucket name must be 18 characters or fewer")
+    .regex(/^[a-z0-9-]+$/, "Use lowercase letters, numbers, or hyphens only")
+    .transform((value) => value.toLowerCase()),
+});
+
 export function DashboardStoragePage() {
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const createBucketMutation = useCreateBucket();
   const { buckets, isLoading, isError, error, refetch } = useListBuckets();
+  const navigate = useNavigate()
+  const form = useForm<z.infer<typeof createBucketSchema>>({
+    resolver: zodResolver(createBucketSchema),
+    defaultValues: {
+      name: "",
+    },
+  });
 
   if (isError) {
     throw error;
   }
+
+  const handleCreateBucket = async (values: z.infer<typeof createBucketSchema>) => {
+    try {
+      await createBucketMutation.mutateAsync({ bucketName: values.name });
+      toast.success("Bucket created successfully");
+      form.reset();
+      setIsCreateOpen(false);
+    } catch (mutationError) {
+      const message =
+        mutationError instanceof Error ? mutationError.message : "Failed to create bucket";
+      toast.error(message);
+    }
+  };
 
   const bucketCountLabel = `${buckets.length} bucket${buckets.length === 1 ? "" : "s"}`;
 
@@ -59,19 +116,89 @@ export function DashboardStoragePage() {
             Browse all buckets available to your workspace.
           </p>
         </div>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => refetch()}
-          disabled={isLoading}
-        >
-          {isLoading ? (
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          ) : (
-            <RefreshCw className="mr-2 h-4 w-4" />
-          )}
-          Refresh
-        </Button>
+        <div className="flex items-center gap-2">
+          <Dialog
+            open={isCreateOpen}
+            onOpenChange={(open) => {
+              setIsCreateOpen(open);
+              if (!open) {
+                form.reset();
+                createBucketMutation.reset();
+              }
+            }}
+          >
+            <DialogTrigger asChild>
+              <Button size="sm">
+                <Plus className="mr-2 h-4 w-4" />
+                Create bucket
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Create a new bucket</DialogTitle>
+                <DialogDescription>
+                  Buckets store your workspace assets. Names must be unique within your project.
+                </DialogDescription>
+              </DialogHeader>
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(handleCreateBucket)} className="space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Bucket name</FormLabel>
+                        <FormControl>
+                          <Input
+                            autoFocus
+                            placeholder="workspace-uploads"
+                            {...field}
+                            disabled={createBucketMutation.isPending}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <DialogFooter>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setIsCreateOpen(false)}
+                      disabled={createBucketMutation.isPending}
+                    >
+                      Cancel
+                    </Button>
+                    <Button type="submit" disabled={createBucketMutation.isPending}>
+                      {createBucketMutation.isPending ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Creating...
+                        </>
+                      ) : (
+                        "Create bucket"
+                      )}
+                    </Button>
+                  </DialogFooter>
+                </form>
+              </Form>
+            </DialogContent>
+          </Dialog>
+
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => refetch()}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <RefreshCw className="mr-2 h-4 w-4" />
+            )}
+            Refresh
+          </Button>
+        </div>
       </div>
 
       <Card>
@@ -112,7 +239,11 @@ export function DashboardStoragePage() {
               </TableHeader>
               <TableBody>
                 {buckets.map((bucket) => (
-                  <TableRow key={bucket.id}>
+                  <TableRow 
+                  key={bucket.id}
+                  onClick={() => navigate(`/dashboard/storage/${bucket.id}`)}
+                  className="hover:cursor-pointer"
+                >
                     <TableCell className="font-medium">
                       <div className="flex items-center gap-2">
                         <HardDrive className="h-4 w-4 text-muted-foreground" />
