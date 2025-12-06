@@ -9,12 +9,12 @@ interface ClientAPIProps {
 }
 
 export async function clientAPI<T = unknown>({ path, options = {}, queryParams = {}, errorHandler = undefined, platform = false }: ClientAPIProps): Promise<T> {
-  let cleanedPath = path.replace(/^\/+/, "")
+  let relativePath = path.replace(/^\/+/, "")
 
-  if (cleanedPath.startsWith("api/")) cleanedPath = cleanedPath.slice("api/".length)
-  
+  if (relativePath.startsWith("api/")) relativePath = relativePath.slice("api/".length)
+
   const base = new URL(`/api/${platform ? 'platform/' : ''}`, config.apiURL);
-  const url = new URL(cleanedPath, base);
+  const url = new URL(relativePath, base);
 
   for (const [key, value] of Object.entries(queryParams)) {
     if (value !== undefined && value !== null) {

@@ -1,4 +1,5 @@
-import { Storage, FileMetadata } from "@google-cloud/storage";
+import { Storage } from "@google-cloud/storage";
+import pLimit from "p-limit";
 import { getBucketPath } from "./utils";
 import { HTTPException } from "hono/http-exception";
 
@@ -24,18 +25,21 @@ export async function deleteBucket(tenantId: string, bucketName: string) {
   return {data: "Successfully deleted bucket"}
 }
 
-export async function getBucket(tenantId: string, bucketName: string) {
+export async function getBucketDetails(tenantId: string, bucketName: string) {
   const bucketPath = getBucketPath(tenantId, bucketName)
 
   const [files] = (await storageClient.bucket(bucketPath).getFiles())
   
-  const objectMetaData: FileMetadata[] = new Array()
-
-  for (const file of files) {
-    const [metaData] = await file.getMetadata()
-    objectMetaData.push(metaData)
-  }
-
+  const limit = pLimit(10)
+  
+  const objectMetaData = await Promise.all(
+    files.map(file =>
+      limit(async () => {
+        const [metadata] = await file.getMetadata()
+        return metadata
+      })
+    )
+  )
   return objectMetaData
 }
 

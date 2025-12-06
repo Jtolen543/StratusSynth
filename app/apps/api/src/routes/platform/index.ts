@@ -6,5 +6,4 @@ import { attachAuth, requireAuth } from "@/middleware/auth";
 export const platformRoutes = new Hono()
 
 platformRoutes.use(attachAuth, requireAuth, attachTenant)
-
-platformRoutes.route("/storage", platformBucketRoutes)
+platformRoutes.route("/bucket", platformBucketRoutes)

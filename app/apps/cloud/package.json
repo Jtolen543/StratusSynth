@@ -6,7 +6,8 @@
   "dependencies": {
     "@google-cloud/storage": "^7.17.3",
     "@types/node": "^24.10.1",
-    "hono": "^4.10.6"
+    "hono": "^4.10.6",
+    "p-limit": "^7.2.0"
   },
   "devDependencies": {
     "@types/bun": "latest"

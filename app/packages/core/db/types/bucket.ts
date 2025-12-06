@@ -1,5 +1,5 @@
 import { Bucket } from "@google-cloud/storage";
-import { bucket } from "../core/db/schemas/bucket"
+import { bucket } from "../schemas/bucket"
 
 export type CreateBucketAPIResponseProps = {
   tenantId: string;

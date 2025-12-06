@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { createBucket, deleteBucket, getBucket } from "./services/buckets";
+import { createBucket, deleteBucket, getBucketDetails } from "./services/buckets";
 import { getBucketMetaInformation } from "./services/utils";
 
 export const cloudBucketRoutes = new Hono()
@@ -17,7 +17,7 @@ cloudBucketRoutes.post("/", async (ctx) => {
 cloudBucketRoutes.get("/", async (ctx) => {
   const {tenantId, bucketName} = ctx.req.query()
 
-  const data = await getBucket(tenantId, bucketName)
+  const data = await getBucketDetails(tenantId, bucketName)
   return ctx.json(data)
 })
 
