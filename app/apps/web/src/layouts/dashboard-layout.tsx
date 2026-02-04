@@ -33,12 +33,12 @@ export function DashboardLayout() {
             <SidebarProvider>
                 <BaseSidebar items={items} user={userData}/>
                 <SidebarInset>
-                    <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
+                    <header className="sticky top-0 z-30 flex h-16 shrink-0 items-center gap-2 border-b bg-background/95 px-2 backdrop-blur transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
                     <div className="flex items-center gap-2 px-4 flex-1">
                         <SidebarTrigger className="-ml-1" />
                         <Separator
-                        orientation="vertical"
-                        className="mr-2 data-[orientation=vertical]:h-4"
+                            orientation="vertical"
+                            className="mr-2 data-[orientation=vertical]:h-4"
                         />
                         <div className="flex items-center gap-2">
                         <h1 className="text-lg font-semibold text-foreground">
@@ -53,7 +53,7 @@ export function DashboardLayout() {
                         <ModeToggle />
                     </div>
                     </header>
-                    <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+                    <div className="flex flex-1 flex-col gap-4 p-4 pt-2">
                         <Outlet />
                     </div>
                 </SidebarInset>

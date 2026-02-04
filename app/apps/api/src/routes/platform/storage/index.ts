@@ -1,6 +1,6 @@
 import { serviceClient } from "@/lib/service";
 import { Hono } from "hono";
-import { CreateBucketCloudResponseProps, GetBucketCloudResponseProps } from "@packages/types/bucket"
+import { CreateBucketCloudResponseProps, GetBucketCloudResponseProps, GetObjectCloudResponseProps } from "@packages/types/bucket"
 import { HTTPException } from "hono/http-exception";
 import { db } from "@/lib/db";
 import { bucket } from "@packages/core/db/schemas/bucket";
@@ -31,7 +31,7 @@ platformBucketRoutes.post("/", async (ctx) => {
     uri: response.uri,
     location: response.location,
     storageClass: response.storageClass,
-    locationType: response.location,
+    locationType: response.locationType,
   }
 
   await db.insert(bucket).values(body)
@@ -43,6 +43,20 @@ platformBucketRoutes.get("/", async (ctx) => {
   const buckets = await db.select().from(bucket).where(eq(bucket.tenantId, tenantId))
 
   return ctx.json({data: buckets})
+})
+
+platformBucketRoutes.get("/objects", async (ctx) => {
+  const tenantId = ctx.get("tenant")
+
+  
+  const { bucketName, objectName } = ctx.req.query()
+
+  const data = await serviceClient<GetObjectCloudResponseProps>({
+    path: "bucket/objects",
+    queryParams: {bucketName, objectName, tenantId}
+  })
+
+  return ctx.json({...data})
 })
 
 platformBucketRoutes.get("/:id", async (ctx) => {

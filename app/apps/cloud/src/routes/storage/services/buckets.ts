@@ -51,3 +51,17 @@ export async function listBuckets(tenantId: string) {
   })
   return buckets[0]
 }
+
+export async function getObjectDetails(tenantId: string, bucketName: string, objectName: string) {
+  const basePath = getBucketPath(tenantId, bucketName)
+
+  const object = storageClient.bucket(basePath).file(objectName)
+  const [metadata] = await object.getMetadata()
+
+  const [signedURL] = await object.getSignedUrl({
+    action: "read",
+    expires: Date.now() + (60 * 60 * 1000)
+  })
+  
+  return [metadata, signedURL] as const
+}

@@ -69,10 +69,15 @@ export type GCSObjectMetadata = {
 
 export type GCSObjectData = Omit<GCSObjectMetadata, "name">
 
+export type GetObjectCloudResponseProps = {
+  metadata: GCSObjectMetadata;
+  url: string;
+}
 export type GetBucketCloudResponseProps = GCSObjectMetadata[]
 
 export type BucketFileNode = {
   path: string;
+  relativePath: string;
   data: {
     kind: "storage#object";
     id: string;
@@ -122,6 +127,7 @@ export interface FormattedFileNode {
       timeFinalized: string;
     };
     path: string;
+    relativePath: string;
     children: FormattedFileNode[];
 }[]
 

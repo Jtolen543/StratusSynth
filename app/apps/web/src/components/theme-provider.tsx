@@ -4,7 +4,7 @@ import {
   DropdownMenuTrigger, 
   DropdownMenuContent, 
   DropdownMenuItem 
-} from "@radix-ui/react-dropdown-menu"
+} from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { Sun, Moon } from "lucide-react" 
 type Theme = "dark" | "light" | "system"
@@ -84,25 +84,21 @@ export function ModeToggle() {
  
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger asChild className="hover:cursor-pointer">
         <Button variant="outline" size="icon">
           <Sun className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
           <Moon className="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent
-        align="end"
-        className="min-w-[10rem] rounded-lg border border-foreground/20 bg-gradient-to-br from-background 
-        via-background to-muted/60 p-3 text-foreground shadow-lg outline outline-1 outline-foreground/50 backdrop-blur-sm"
-      >
-        <DropdownMenuItem onClick={() => setTheme("light")} className="outline-none hover:bg-muted hover:cursor-pointer rounded transition duration-150 rounded px-1">
+      <DropdownMenuContent className="hover:cursor-pointer">
+        <DropdownMenuItem onClick={() => setTheme("light")} className="hover:cursor-pointer">
           Light
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")} className="outline-none hover:bg-muted hover:cursor-pointer rounded transition duration-150 rounded px-1">
+        <DropdownMenuItem onClick={() => setTheme("dark")} className="hover:cursor-pointer">
           Dark
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")} className="outline-none hover:bg-muted hover:cursor-pointer rounded transition duration-150 rounded px-1">
+        <DropdownMenuItem onClick={() => setTheme("system")} className="hover:cursor-pointer">
           System
         </DropdownMenuItem>
       </DropdownMenuContent>

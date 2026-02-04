@@ -3,12 +3,13 @@ import { GCSObjectData, GCSObjectMetadata, BucketFileStructure, FormattedFileStr
 export function buildBucketTree(metadata: GCSObjectMetadata[]) {
   const root: BucketFileStructure = []
 
-  const addNode = (level: BucketFileStructure, path: string, data?: GCSObjectData) => {
+  const addNode = (level: BucketFileStructure, path: string, relativePath: string, data?: GCSObjectData) => {
     let node = level.find((val) => val.path === path)
 
     if (!node) {
       node = {
         path,
+        relativePath,
         data: data ?? {
           kind: "storage#object",
           id: "",
@@ -50,9 +51,10 @@ export function buildBucketTree(metadata: GCSObjectMetadata[]) {
 
       currentPath = currentPath ? `${currentPath}/${segment}` : segment
       const fullPath = !isLast ? `${currentPath}/` : isFolder ? `${currentPath}/` : currentPath
+      const relativePath = isFolder ? `${segment}/` : segment
       const objectData = isLast ? data : undefined
 
-      const node = addNode(currentLevel, fullPath, objectData)
+      const node = addNode(currentLevel, fullPath, relativePath, objectData)
       currentLevel = node.children
     })
   }

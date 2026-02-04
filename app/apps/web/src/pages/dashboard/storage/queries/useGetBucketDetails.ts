@@ -1,7 +1,7 @@
 import { clientAPI } from "@/config/api";
 import { useQuery } from "@tanstack/react-query";
 import { GetBucketAPIResponseProps } from "@packages/types/bucket"
-import { formatBucketTree } from "../utils";
+import { formatBucketTree, getFolderPathMap } from "../utils";
 
 export function useGetBucketDetails(id: string) {
   const query = useQuery({
@@ -14,9 +14,11 @@ export function useGetBucketDetails(id: string) {
     
       const buckets = response.data
       const formattedBuckets = formatBucketTree(buckets)
+      const folderMap = getFolderPathMap(formattedBuckets)
       
       return {
-        details: formattedBuckets
+        details: formattedBuckets,
+        folderMap: folderMap
       }
     },
     staleTime: 60_000,
@@ -26,6 +28,7 @@ export function useGetBucketDetails(id: string) {
 
   return {
     details: query.data?.details ?? undefined,
+    folderMap: query.data?.folderMap ?? {},
     
     isLoading: query.isLoading,
     isError: query.isError,
@@ -33,3 +36,5 @@ export function useGetBucketDetails(id: string) {
     refetch: query.refetch
   }
 }
+
+export type HookBucketDetails = NonNullable<ReturnType<typeof useGetBucketDetails>["details"]>
