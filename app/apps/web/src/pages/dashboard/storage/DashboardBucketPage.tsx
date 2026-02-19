@@ -13,7 +13,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs"
-import { ObjectsContentTab } from "./_components/objects"
+import { ObjectsContentTab } from "./_components/ObjectContentTab"
 
 export function DashboardBucketPage() {
   const { id } = useParams()

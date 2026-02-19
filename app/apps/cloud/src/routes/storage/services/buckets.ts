@@ -65,3 +65,18 @@ export async function getObjectDetails(tenantId: string, bucketName: string, obj
   
   return [metadata, signedURL] as const
 }
+
+export async function deleteObject(tenantId: string, bucketName: string, objectName: string) {
+  const basePath = getBucketPath(tenantId, bucketName)
+
+  await storageClient.bucket(basePath).file(objectName).delete()
+  return {data: "Successfully deleted object"}
+}
+
+export async function uploadObject(tenantId: string, bucketName: string, objectName: string, fileBuffer: Buffer) {
+  const basePath = getBucketPath(tenantId, bucketName)
+
+  const file = storageClient.bucket(basePath).file(objectName)
+  await file.save(fileBuffer)
+  return {data: "Successfully uploaded object"}
+}

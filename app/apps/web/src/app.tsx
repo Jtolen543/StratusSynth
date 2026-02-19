@@ -16,6 +16,7 @@ import { TwoFactorPage } from "./pages/main/auth/2FAPage";
 import { ResetPasswordPage } from "./pages/main/auth/ResetPasswordPage";
 import { DashboardHomePage } from "./pages/dashboard/home/DashboardHomePage";
 import { DashboardStoragePage } from "./pages/dashboard/storage/DashboardStoragePage";
+import { DashboardObjectPage } from "./pages/dashboard/storage/DashboardObjectPage";
 import { DashboardDatabasePage } from "./pages/dashboard/database/DashboardDatabasePage";
 import { DashboardApplicationPage } from "./pages/dashboard/application/ApplicationPage";
 import { DashboardAgentPage } from "./pages/dashboard/agent/DashboardAgentPage";
@@ -66,6 +67,7 @@ export function App() {
 
           <Route path="storage" element={<DashboardStoragePage />} />
           <Route path="storage/:id" element={<DashboardBucketPage />}/>
+          <Route path="storage/:id/object/:name" element={<DashboardObjectPage />}/>
 
           <Route path="database" element={<DashboardDatabasePage />} />
           <Route path="application" element={<DashboardApplicationPage />} />
