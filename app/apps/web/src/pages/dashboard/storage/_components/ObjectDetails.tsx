@@ -67,8 +67,8 @@ export function ObjectDetails({ bucket, folder, folderMap, onSelectFolder, class
           { label: "Type", value: isFolder ? "Folder" : activeItem.data?.contentType || "File" },
           { label: "Items", value: isFolder ? (activeItem.children?.length ?? 0) : "--" },
           { label: "Size", value: isFolder ? "--" : formatBytes(activeItem.data?.size || 0) },
-          { label: "Created", value: isFolder ? "--" : formatDate(activeItem.data?.timeCreated || "") },
-          { label: "Updated", value: isFolder ? "--" : formatDate(activeItem.data?.updated || "") },
+          { label: "Created", value: isFolder ? "--" : formatDate(activeItem.data?.createdAt || "") },
+          { label: "Updated", value: isFolder ? "--" : formatDate(activeItem.data?.updatedAt || "") },
           { label: "Storage Class", value: isFolder ? "--" : activeItem.data?.storageClass || "Standard" },
           { label: "Public", value: isFolder ? "--" : "Not Public" },
         ]
@@ -155,7 +155,7 @@ export function ObjectDetails({ bucket, folder, folderMap, onSelectFolder, class
                     const folderItem = child.path.endsWith("/")
                     const isSelected = selectedItems.has(child.path)
                     
-                    function onClickHandler() {
+                    function onObjectOpen() {
                       if (!folderItem) {
                         navigate(`${location.pathname}/object/${(child.relativePath)}`)
                       } else {
@@ -168,7 +168,7 @@ export function ObjectDetails({ bucket, folder, folderMap, onSelectFolder, class
                         className={`grid grid-cols-[minmax(18rem,1fr)_9rem_11rem_auto] items-center gap-x-4 rounded-lg border bg-card px-3 py-2 transition-colors ${
                           isSelected ? "bg-muted/40 border-primary/40" : "hover:bg-muted/40"
                         } cursor-pointer`}
-                        onClick={onClickHandler}
+                        onDoubleClick={onObjectOpen}
                       >
                         <div className="flex items-center gap-3 min-w-0">
                           <Tooltip>
@@ -203,7 +203,7 @@ export function ObjectDetails({ bucket, folder, folderMap, onSelectFolder, class
                         </div>
 
                         <div className="text-sm text-muted-foreground truncate">
-                          {folderItem ? "—" : formatDate(child.data?.updated || "")}
+                          {folderItem ? "—" : formatDate(child.data?.updatedAt || "")}
                         </div>
 
                         <div className="justify-self-end">
@@ -215,9 +215,7 @@ export function ObjectDetails({ bucket, folder, folderMap, onSelectFolder, class
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end" className="w-40">
                               <DropdownMenuItem onSelect={() => setActiveItem(child)}>View details</DropdownMenuItem>
-                              <DropdownMenuItem>Open</DropdownMenuItem>
-                              <DropdownMenuItem>Share link</DropdownMenuItem>
-                              <DropdownMenuItem>Configure</DropdownMenuItem>
+                              <DropdownMenuItem onClick={onObjectOpen}>Open</DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
                         </div>

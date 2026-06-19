@@ -10,15 +10,16 @@
     "migrate:prod": "dotenv -e .env.prod tsx scripts/migrate.ts"
   },
   "dependencies": {
-    "@better-auth/passkey": "^1.4.1",
-    "@neondatabase/serverless": "^1.0.2",
-    "@react-email/components": "^1.0.1",
-    "better-auth": "^1.4.1",
+    "@better-auth/api-key": "^1.6.19",
+    "@better-auth/passkey": "^1.6.19",
+    "@neondatabase/serverless": "^1.1.0",
+    "@react-email/components": "^1.0.12",
+    "better-auth": "^1.6.19",
     "drizzle": "^1.4.0",
     "drizzle-orm": "^0.44.7",
-    "hono": "^4.10.5",
-    "resend": "^6.4.2",
-    "zod": "^4.1.12"
+    "hono": "^4.12.26",
+    "resend": "^6.14.0",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@types/bun": "latest"

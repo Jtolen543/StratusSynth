@@ -1,6 +1,8 @@
 import { APIError, betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { emailOTP, twoFactor, phoneNumber, admin, apiKey, createAuthMiddleware, jwt } from "better-auth/plugins";
+import { emailOTP, twoFactor, phoneNumber, admin, jwt } from "better-auth/plugins";
+import { createAuthMiddleware } from "better-auth/api";
+import { apiKey } from "@better-auth/api-key";
 import { stripe } from "@better-auth/stripe"
 import { passkey } from "@better-auth/passkey";
 import { db } from "@/lib/db"

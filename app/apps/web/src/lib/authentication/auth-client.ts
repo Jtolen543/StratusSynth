@@ -1,5 +1,6 @@
 import { createAuthClient } from "better-auth/react"
-import {twoFactorClient, emailOTPClient, adminClient, apiKeyClient, jwtClient} from "better-auth/client/plugins"
+import {twoFactorClient, emailOTPClient, adminClient, jwtClient} from "better-auth/client/plugins"
+import { apiKeyClient } from "@better-auth/api-key/client"
 import { passkeyClient } from "@better-auth/passkey/client"
 import { stripeClient } from "@better-auth/stripe/client"
 import { useNavigate } from "react-router"

@@ -2,10 +2,10 @@
   "name": "hono-vite-boilerplate",
   "devDependencies": {
     "dotenv-cli": "^11.0.0",
-    "eslint": "^8.57.0",
-    "prettier": "^3.2.5",
-    "tsx": "^4.20.6",
-    "turbo": "^2.6.1"
+    "eslint": "^8.57.1",
+    "prettier": "^3.8.4",
+    "tsx": "^4.22.4",
+    "turbo": "^2.9.18"
   },
   "packageManager": "bun@1.2.8",
   "private": true,
@@ -14,6 +14,8 @@
     "dev": "turbo run dev",
     "dev:frontend": "turbo run dev --filter=web",
     "dev:backend": "turbo run dev --filter=api --filter=cloud",
+    "dev:api": "turbo run dev --filter=web",
+    "dev:cloud": "turbo run dev --filter=cloud",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "migrate:auth": "bunx @better-auth/cli@latest generate --config ./apps/api/src/lib/auth/index.ts",
@@ -26,7 +28,10 @@
     "packages/*"
   ],
   "dependencies": {
-    "@types/node": "^24.10.1",
-    "drizzle-kit": "^0.31.7"
+    "@types/node": "^24.13.2",
+    "drizzle-kit": "^0.31.10"
+  },
+  "overrides": {
+    "@peculiar/asn1-schema": "^2.8.0"
   }
 }
